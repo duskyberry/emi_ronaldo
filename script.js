@@ -17,6 +17,41 @@
   let scored = false;
   let originX = 0;
   let pointerStartX = 0;
+  let audioUnlocked = false;
+
+  const goalSound = document.getElementById('goal-sound');
+  if (goalSound){
+    goalSound.load();
+    console.log('[goal-sound] elemento encontrado, precargando…', goalSound.src);
+  } else {
+    console.warn('[goal-sound] no se encontró el elemento #goal-sound en el DOM');
+  }
+
+  /* Los navegadores (sobre todo Safari/iOS) solo permiten "desbloquear"
+     audio dentro de un gesto de usuario de confianza: pointerdown/touchstart
+     sí cuentan, pero pointermove (que es donde se detecta el gol durante el
+     arrastre) NO cuenta como gesto válido para autoplay. Por eso se
+     desbloquea aquí, en la primera interacción, reproduciendo y pausando
+     de inmediato en silencio. Así, cuando luego se llama audio.play() al
+     anotar el gol, el navegador ya lo permite. */
+  function unlockAudio(){
+    if (audioUnlocked || !goalSound) return;
+    audioUnlocked = true;
+    const playAttempt = goalSound.play();
+    if (playAttempt !== undefined){
+      playAttempt
+        .then(() => {
+          goalSound.pause();
+          goalSound.currentTime = 0;
+          console.log('[goal-sound] audio desbloqueado correctamente tras gesto del usuario');
+        })
+        .catch((err) => {
+          console.warn('[goal-sound] no se pudo desbloquear el audio en el primer gesto:', err);
+          // Se reintentará igual al anotar el gol.
+          audioUnlocked = false;
+        });
+    }
+  }
 
   function getBallOffsetX(){
     const style = window.getComputedStyle(ball);
@@ -26,6 +61,7 @@
 
   function onPointerDown(e){
     if (scored) return;
+    unlockAudio();
     dragging = true;
     ball.classList.add('dragging');
     pointerStartX = (e.touches ? e.touches[0].clientX : e.clientX);
@@ -60,10 +96,21 @@
   }
 
   function playGoalSound(){
-    const sound = document.getElementById('goal-sound');
-    if (!sound) return;
-    sound.currentTime = 0;
-    sound.play().catch(() => { /* autoplay bloqueado, se ignora silenciosamente */ });
+    if (!goalSound){
+      console.warn('[goal-sound] no se puede reproducir: elemento no existe');
+      return;
+    }
+    try {
+      goalSound.currentTime = 0;
+      const playAttempt = goalSound.play();
+      if (playAttempt !== undefined){
+        playAttempt
+          .then(() => console.log('[goal-sound] reproduciendo sonido de gol ✔'))
+          .catch((err) => console.error('[goal-sound] falló la reproducción al anotar:', err));
+      }
+    } catch (err){
+      console.error('[goal-sound] excepción al intentar reproducir:', err);
+    }
   }
 
   function score(){
@@ -100,6 +147,7 @@
   ball.addEventListener('keydown', (e) => {
     if ((e.key === 'Enter' || e.key === ' ') && !scored){
       e.preventDefault();
+      unlockAudio();
       score();
     }
   });
