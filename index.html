@@ -1,370 +1,219 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-    />
-    <title>Emilio cumple 8 · Invitación</title>
-    <meta
-      name="description"
-      content="Invitación digital al cumpleaños de Emilio — soccer vibes."
-    />
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Emilio cumple 8 · Invitación</title>
+<meta name="description" content="Invitación digital al cumpleaños de Emilio — soccer vibes.">
 
-    <!-- Vista previa para WhatsApp / redes -->
-    <meta property="og:type" content="website" />
-    <meta
-      property="og:title"
-      content="Emilio cumple 8 · ¡Te invito a celebrar conmigo!"
-    />
-    <meta
-      property="og:description"
-      content="Lunes 3 de agosto, 2026. Toca para ver la invitación ⚽"
-    />
-    <meta
-      property="og:image"
-      content="https://raw.githubusercontent.com/edvardoviedo/recursos/refs/heads/main/duskyberry/thumbnail.jpg"
-    />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content="Emilio cumple 8 · ¡Te invito a celebrar conmigo!"
-    />
-    <meta
-      name="twitter:description"
-      content="Lunes 3 de agosto, 2026. Toca para ver la invitación ⚽"
-    />
-    <meta
-      name="twitter:image"
-      content="https://raw.githubusercontent.com/edvardoviedo/recursos/refs/heads/main/duskyberry/thumbnail.jpg"
-    />
+<!-- Vista previa para WhatsApp / redes -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Emilio cumple 8 · ¡Te invito a celebrar conmigo!">
+<meta property="og:description" content="Lunes 3 de agosto, 2026. Toca para ver la invitación ⚽">
+<meta property="og:image" content="https://raw.githubusercontent.com/edvardoviedo/recursos/refs/heads/main/duskyberry/thumbnail.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Emilio cumple 8 · ¡Te invito a celebrar conmigo!">
+<meta name="twitter:description" content="Lunes 3 de agosto, 2026. Toca para ver la invitación ⚽">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/edvardoviedo/recursos/refs/heads/main/duskyberry/thumbnail.jpg">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Bebas+Neue&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <!-- Fondo fijo: capa independiente para que sea 100% estática en mobile -->
-    <div id="bg-fixed" aria-hidden="true"></div>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
-    <!-- ================= INTRO / WOW GATE ================= -->
-    <div id="intro-screen" role="dialog" aria-label="Pantalla de bienvenida">
-      <div class="intro-glow"></div>
-      <p class="intro-eyebrow">Haz recibido una invitación muy especial</p>
-      <h1 class="intro-title">Lleva el balón<br />a la portería</h1>
-      <p class="intro-sub">
-        Arrastra <span aria-hidden="true">⚽</span> hasta
-        <span aria-hidden="true">🥅</span> para descubrirla
-      </p>
+<!-- Fondo fijo: capa independiente para que sea 100% estática en mobile -->
+<div id="bg-fixed" aria-hidden="true"></div>
 
-      <div class="pitch" id="pitch">
-        <div class="goal" id="goal" aria-hidden="true">🥅</div>
-        <button
-          type="button"
-          class="ball"
-          id="ball"
-          aria-label="Arrastra el balón hacia la portería"
-        >
-          ⚽
-        </button>
-      </div>
+<!-- ================= INTRO / WOW GATE ================= -->
+<div id="intro-screen" role="dialog" aria-label="Pantalla de bienvenida">
+  <div class="intro-glow"></div>
+  <p class="intro-eyebrow">Haz recibido una invitación muy especial</p>
+  <h1 class="intro-title">Lleva el balón<br>a la portería</h1>
+  <p class="intro-sub">Arrastra <span aria-hidden="true">⚽</span> hasta <span aria-hidden="true">🥅</span> para descubrirla</p>
 
-      <div id="confetti-layer" aria-hidden="true"></div>
-      <div id="goal-flash" class="goal-flash" aria-hidden="true">GOOOOL</div>
+  <div class="pitch" id="pitch">
+    <div class="goal" id="goal" aria-hidden="true">🥅</div>
+    <button type="button" class="ball" id="ball" aria-label="Arrastra el balón hacia la portería">⚽</button>
+  </div>
+
+  <div id="confetti-layer" aria-hidden="true"></div>
+  <div id="goal-flash" class="goal-flash" aria-hidden="true">GOOOOL</div>
+  <audio id="goal-sound" preload="auto" playsinline
+    src="https://raw.githubusercontent.com/edvardoviedo/emimessi/main/Siuuu%21%20Cristiano%20Ronaldo%20-%20Sound%20Effect.mp3"></audio>
+</div>
+
+<!-- ================= MAIN CONTENT ================= -->
+<main id="main-content" hidden>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-media">
+      <img src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/COVER.jpeg" alt="Emilio con su balón de fútbol" class="hero-img" id="hero-img">
+      <div class="hero-overlay"></div>
     </div>
+    <div class="hero-copy reveal">
+      <p class="hero-eyebrow">7 - Bravos Elite</p>
+      <h1 class="hero-title">Emilio<br>cumple <span class="hero-number">8</span></h1>
+      <p class="hero-sub">¡Te invito a celebrar conmigo!</p>
+      <div class="hero-scroll-cue" aria-hidden="true"><span></span></div>
+    </div>
+  </section>
 
-    <!-- ================= MAIN CONTENT ================= -->
-    <main id="main-content" hidden>
-      <!-- HERO -->
-      <section class="hero" id="hero">
-        <div class="hero-media">
-          <img
-            src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/COVER.jpeg"
-            alt="Emilio con su balón de fútbol"
-            class="hero-img"
-            id="hero-img"
-          />
-          <div class="hero-overlay"></div>
-        </div>
-        <div class="hero-copy reveal">
-          <p class="hero-eyebrow">10 · Fundadores FC</p>
-          <h1 class="hero-title">
-            Emilio<br />cumple <span class="hero-number">8</span>
-          </h1>
-          <p class="hero-sub">¡Te invito a celebrar conmigo!</p>
-          <div class="hero-scroll-cue" aria-hidden="true"><span></span></div>
-        </div>
-      </section>
+  <div class="divider"><span class="divider-ball" aria-hidden="true">⚽</span></div>
 
-      <div class="divider">
-        <span class="divider-ball" aria-hidden="true">⚽</span>
+  <!-- MENSAJE EMOCIONAL -->
+  <section class="section message" id="mensaje">
+    <div class="glass-card reveal">
+      <p class="msg-line">Gracias a Dios por un año más de vida, salud y alegría.</p>
+      <p class="msg-line">Estoy súper feliz de cumplir 8 años y quiero celebrarlo rodeado de las personas que más quiero.</p>
+      <p class="msg-line msg-highlight">Tu presencia es muy importante para mí.</p>
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-ball" aria-hidden="true">⚽</span></div>
+
+  <!-- COUNTDOWN -->
+  <section class="section countdown-section" id="countdown-section">
+    <h2 class="section-eyebrow reveal">Faltan</h2>
+    <div class="countdown reveal" id="countdown" aria-live="polite">
+      <div class="cd-unit"><span class="cd-num" id="cd-days">00</span><span class="cd-label">días</span></div>
+      <span class="cd-colon">:</span>
+      <div class="cd-unit"><span class="cd-num" id="cd-hours">00</span><span class="cd-label">hrs</span></div>
+      <span class="cd-colon">:</span>
+      <div class="cd-unit"><span class="cd-num" id="cd-min">00</span><span class="cd-label">min</span></div>
+      <span class="cd-colon">:</span>
+      <div class="cd-unit"><span class="cd-num" id="cd-sec">00</span><span class="cd-label">seg</span></div>
+    </div>
+    <p class="countdown-date reveal">Lunes 3 de agosto, 2026</p>
+    <div class="wide-gif reveal">
+      <img src="https://usagif.com/wp-content/uploads/gify/cristiano-ronaldo-3.gif" alt="Celebración de fútbol" loading="lazy">
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-ball" aria-hidden="true">⚽</span></div>
+
+  <!-- GALERIA -->
+  <section class="section gallery-section" id="galeria">
+    <h2 class="section-eyebrow reveal">Momentos</h2>
+    <div class="gallery" tabindex="0" aria-label="Galería de fotos, desliza para ver más">
+      <img src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/EMI_BOMBO%CC%81N/1.jpeg" alt="Foto de Emilio 1" loading="lazy" class="float-img f1">
+      <img src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/EMI_BOMBO%CC%81N/2.jpeg" alt="Foto de Emilio 2" loading="lazy" class="float-img f2">
+      <img src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/EMI_BOMBO%CC%81N/3.jpeg" alt="Foto de Emilio 3" loading="lazy" class="float-img f3">
+      <img src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/EMI_BOMBO%CC%81N/4.jpeg" alt="Foto de Emilio 4" loading="lazy" class="float-img f1">
+      <img src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/EMI_BOMBO%CC%81N/5.jpeg" alt="Foto de Emilio 5" loading="lazy" class="float-img f2">
+      <img src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/EMI_BOMBO%CC%81N/6.jpeg" alt="Foto de Emilio 6" loading="lazy" class="float-img f3">
+      <img src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/EMI_BOMBO%CC%81N/7.jpeg" alt="Foto de Emilio 7" loading="lazy" class="float-img f1">
+      <img src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/EMI_BOMBO%CC%81N/8.jpeg" alt="Foto de Emilio 8" loading="lazy" class="float-img f2">
+      <img src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/EMI_BOMBO%CC%81N/9.jpeg" alt="Foto de Emilio 9" loading="lazy" class="float-img f3">
+      <img src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/EMI_BOMBO%CC%81N/10.jpeg" alt="Foto de Emilio 10" loading="lazy" class="float-img f1">
+      <img src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/EMI_BOMBO%CC%81N/11.jpeg" alt="Foto de Emilio 11" loading="lazy" class="float-img f2">
+      <img src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/EMI_BOMBO%CC%81N/12.jpeg" alt="Foto de Emilio 12" loading="lazy" class="float-img f3">
+      <img src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/EMI_BOMBO%CC%81N/13.jpeg" alt="Foto de Emilio 13" loading="lazy" class="float-img f1">
+      <img src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/EMI_BOMBO%CC%81N/14.jpeg" alt="Foto de Emilio 14" loading="lazy" class="float-img f2">
+      <img src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/EMI_BOMBO%CC%81N/15.jpeg" alt="Foto de Emilio 15" loading="lazy" class="float-img f3">
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-ball" aria-hidden="true">⚽</span></div>
+
+  <!-- EVENTO -->
+  <section class="section event-section" id="evento">
+    <div class="glass-card reveal">
+      <h2 class="section-eyebrow">El partido es aquí</h2>
+      <p class="event-address">Álvaro Fernández 176, fracc. Fundadores</p>
+      <p class="event-date">Lunes 3 de agosto</p>
+      <div class="map-wrap">
+        <iframe
+          title="Ubicación del evento"
+          src="https://www.google.com/maps?q=%C3%81lvaro+Fern%C3%A1ndez+176%2C+Fraccionamiento+Fundadores%2C+Saltillo%2C+Coahuila&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
       </div>
+      <p class="event-times">Ven a dejarme a las <strong>3:00 PM</strong> y pasa por mí a las <strong>9:00 PM</strong></p>
+      <button type="button" class="btn-glass" id="add-calendar">Agregar al calendario</button>
+    </div>
+  </section>
 
-      <!-- MENSAJE EMOCIONAL -->
-      <section class="section message" id="mensaje">
-        <div class="glass-card reveal">
-          <p class="msg-line">
-            Gracias a Dios por un año más de vida, salud y alegría.
-          </p>
-          <p class="msg-line">
-            Estoy súper feliz de cumplir 8 años y quiero celebrarlo rodeado de
-            las personas que más quiero.
-          </p>
-          <p class="msg-line msg-highlight">
-            Tu presencia es muy importante para mí.
-          </p>
-        </div>
-      </section>
+  <div class="divider"><span class="divider-ball" aria-hidden="true">⚽</span></div>
 
-      <div class="divider">
-        <span class="divider-ball" aria-hidden="true">⚽</span>
+  <!-- PLAYLIST -->
+  <section class="section playlist-section" id="playlist">
+    <div class="glass-card reveal">
+      <h2 class="section-eyebrow">La banda sonora</h2>
+      <p class="playlist-copy">Las favoritas de Emilio para ese día 💛</p>
+      <iframe
+        data-testid="embed-iframe"
+        style="border-radius:16px"
+        src="https://open.spotify.com/embed/playlist/193I7scyeErGlksqozU8kK?utm_source=generator&si=c4aef81a16124555"
+        width="100%" height="352" frameBorder="0"
+        allowfullscreen=""
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy">
+      </iframe>
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-ball" aria-hidden="true">⚽</span></div>
+
+  <!-- RSVP -->
+  <section class="section rsvp-section" id="rsvp">
+    <div class="glass-card reveal">
+      <h2 class="section-eyebrow">Confirma tu lugar en las gradas</h2>
+      <div class="rsvp-fields">
+        <label class="field">
+          <span>Nombre</span>
+          <input type="text" id="rsvp-name" placeholder="¿Cómo te llamas?" autocomplete="name" required>
+        </label>
+        <label class="field">
+          <span>¿Cuántos acompañantes?</span>
+          <input type="number" id="rsvp-guests" min="0" max="20" placeholder="0" inputmode="numeric">
+        </label>
+        <label class="field">
+          <span>Mensaje especial para Emilio</span>
+          <textarea id="rsvp-message" rows="3" placeholder="Déjale un mensaje..."></textarea>
+        </label>
+        <button type="button" class="btn-primary" id="rsvp-submit">Confirmar asistencia</button>
       </div>
+    </div>
+  </section>
 
-      <!-- COUNTDOWN -->
-      <section class="section countdown-section" id="countdown-section">
-        <h2 class="section-eyebrow reveal">Faltan</h2>
-        <div class="countdown reveal" id="countdown" aria-live="polite">
-          <div class="cd-unit">
-            <span class="cd-num" id="cd-days">00</span
-            ><span class="cd-label">días</span>
-          </div>
-          <span class="cd-colon">:</span>
-          <div class="cd-unit">
-            <span class="cd-num" id="cd-hours">00</span
-            ><span class="cd-label">hrs</span>
-          </div>
-          <span class="cd-colon">:</span>
-          <div class="cd-unit">
-            <span class="cd-num" id="cd-min">00</span
-            ><span class="cd-label">min</span>
-          </div>
-          <span class="cd-colon">:</span>
-          <div class="cd-unit">
-            <span class="cd-num" id="cd-sec">00</span
-            ><span class="cd-label">seg</span>
-          </div>
-        </div>
-        <p class="countdown-date reveal">Lunes 3 de agosto, 2026</p>
-        <div class="wide-gif reveal">
-          <img
-            src="https://usagif.com/wp-content/uploads/gify/cristiano-ronaldo-3.gif"
-            alt="Celebración de fútbol"
-            loading="lazy"
-          />
-        </div>
-      </section>
+  <div class="divider"><span class="divider-ball" aria-hidden="true">⚽</span></div>
 
-      <div class="divider">
-        <span class="divider-ball" aria-hidden="true">⚽</span>
+  <!-- REGALOS -->
+  <section class="section gifts-section" id="regalos">
+    <div class="glass-card reveal">
+      <h2 class="section-eyebrow">Si quieres traer algo</h2>
+      <p class="gifts-copy">Tu compañía es lo más importante para mí, pero si deseas obsequiarme algo, aquí hay algunas ideas:</p>
+      <div class="pills" aria-label="Ideas de regalo">
+        <span class="pill">⚡ Harry Potter</span>
+        <span class="pill">🦸 Marvel</span>
+        <span class="pill">🦇 DC</span>
+        <span class="pill">🦖 Jurassic Park</span>
+        <span class="pill">⚽ Soccer</span>
+        <span class="pill">💵 Money Cash</span>
       </div>
+    </div>
+    <div class="wide-gif reveal">
+      <img src="https://www.gifcen.com/wp-content/uploads/2023/06/ronaldo-gif-6.gif" alt="Celebración de gol" loading="lazy">
+    </div>
+    <p class="see-you reveal">Te espero ⚽</p>
+  </section>
 
-      <!-- GALERIA -->
-      <section class="section gallery-section" id="galeria">
-        <h2 class="section-eyebrow reveal">Momentos</h2>
-        <div
-          class="gallery"
-          tabindex="0"
-          aria-label="Galería de fotos, desliza para ver más"
-        >
-          <img
-            src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/1.jpeg"
-            alt="Foto de Emilio 1"
-            loading="lazy"
-            class="float-img f1"
-          />
-          <img
-            src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/2.jpeg"
-            alt="Foto de Emilio 2"
-            loading="lazy"
-            class="float-img f2"
-          />
-          <img
-            src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/3.jpeg"
-            alt="Foto de Emilio 3"
-            loading="lazy"
-            class="float-img f3"
-          />
-          <img
-            src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/4.jpeg"
-            alt="Foto de Emilio 4"
-            loading="lazy"
-            class="float-img f1"
-          />
-          <img
-            src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/5.jpeg"
-            alt="Foto de Emilio 5"
-            loading="lazy"
-            class="float-img f2"
-          />
-          <img
-            src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/6.jpeg"
-            alt="Foto de Emilio 6"
-            loading="lazy"
-            class="float-img f3"
-          />
-          <img
-            src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/7.jpeg"
-            alt="Foto de Emilio 7"
-            loading="lazy"
-            class="float-img f1"
-          />
-          <img
-            src="https://raw.githubusercontent.com/edvardoviedo/emimessi/refs/heads/main/files/photos%26/8.jpeg"
-            alt="Foto de Emilio 8"
-            loading="lazy"
-            class="float-img f2"
-          />
-        </div>
-      </section>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <a class="btn-glass footer-btn"
+       href="https://wa.me/528442934546?text=Hola%2C%20me%20gustar%C3%ADa%20una%20invitaci%C3%B3n%20digital%2C%20%C2%BFPuedes%20darme%20info%3F"
+       target="_blank" rel="noopener">
+      Hecho con amor por <strong>duskyberry</strong>
+    </a>
+    <p class="footer-year">2026</p>
+  </footer>
 
-      <div class="divider">
-        <span class="divider-ball" aria-hidden="true">⚽</span>
-      </div>
+</main>
 
-      <!-- EVENTO -->
-      <section class="section event-section" id="evento">
-        <div class="glass-card reveal">
-          <h2 class="section-eyebrow">El partido es aquí</h2>
-          <p class="event-address">Álvaro Fernández 176, fracc. Fundadores</p>
-          <p class="event-date">Lunes 3 de agosto</p>
-          <div class="map-wrap">
-            <iframe
-              title="Ubicación del evento"
-              src="https://www.google.com/maps?q=%C3%81lvaro+Fern%C3%A1ndez+176%2C+Fraccionamiento+Fundadores%2C+Saltillo%2C+Coahuila&output=embed"
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            >
-            </iframe>
-          </div>
-          <p class="event-times">
-            Ven a dejarme a las <strong>3:00 PM</strong> y pasa por mí a las
-            <strong>9:00 PM</strong>
-          </p>
-          <button type="button" class="btn-glass" id="add-calendar">
-            Agregar al calendario
-          </button>
-        </div>
-      </section>
-
-      <div class="divider">
-        <span class="divider-ball" aria-hidden="true">⚽</span>
-      </div>
-
-      <!-- PLAYLIST -->
-      <section class="section playlist-section" id="playlist">
-        <div class="glass-card reveal">
-          <h2 class="section-eyebrow">La banda sonora</h2>
-          <p class="playlist-copy">Las favoritas de Emilio para ese día 💛</p>
-          <iframe
-            data-testid="embed-iframe"
-            style="border-radius: 16px"
-            src="https://open.spotify.com/embed/playlist/193I7scyeErGlksqozU8kK?utm_source=generator&si=c4aef81a16124555"
-            width="100%"
-            height="352"
-            frameborder="0"
-            allowfullscreen=""
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy"
-          >
-          </iframe>
-        </div>
-      </section>
-
-      <div class="divider">
-        <span class="divider-ball" aria-hidden="true">⚽</span>
-      </div>
-
-      <!-- RSVP -->
-      <section class="section rsvp-section" id="rsvp">
-        <div class="glass-card reveal">
-          <h2 class="section-eyebrow">Confirma tu lugar en las gradas</h2>
-          <div class="rsvp-fields">
-            <label class="field">
-              <span>Nombre</span>
-              <input
-                type="text"
-                id="rsvp-name"
-                placeholder="¿Cómo te llamas?"
-                autocomplete="name"
-                required
-              />
-            </label>
-            <label class="field">
-              <span>¿Cuántos acompañantes?</span>
-              <input
-                type="number"
-                id="rsvp-guests"
-                min="0"
-                max="20"
-                placeholder="0"
-                inputmode="numeric"
-              />
-            </label>
-            <label class="field">
-              <span>Mensaje especial para Emilio</span>
-              <textarea
-                id="rsvp-message"
-                rows="3"
-                placeholder="Déjale un mensaje..."
-              ></textarea>
-            </label>
-            <button type="button" class="btn-primary" id="rsvp-submit">
-              Confirmar asistencia
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <div class="divider">
-        <span class="divider-ball" aria-hidden="true">⚽</span>
-      </div>
-
-      <!-- REGALOS -->
-      <section class="section gifts-section" id="regalos">
-        <div class="glass-card reveal">
-          <h2 class="section-eyebrow">Si quieres traer algo</h2>
-          <p class="gifts-copy">
-            Tu compañía es lo más importante para mí, pero si deseas obsequiarme
-            algo, aquí hay algunas ideas:
-          </p>
-          <div class="pills" aria-label="Ideas de regalo">
-            <span class="pill">Harry Potter</span>
-            <span class="pill">Marvel</span>
-            <span class="pill">DC</span>
-            <span class="pill">Jurassic Park</span>
-            <span class="pill">Soccer</span>
-            <span class="pill">Money Cash</span>
-          </div>
-        </div>
-        <div class="wide-gif reveal">
-          <img
-            src="https://www.gifcen.com/wp-content/uploads/2023/06/ronaldo-gif-6.gif"
-            alt="Celebración de gol"
-            loading="lazy"
-          />
-        </div>
-        <p class="see-you reveal">Te espero ⚽</p>
-      </section>
-
-      <!-- FOOTER -->
-      <footer class="footer">
-        <a
-          class="btn-glass footer-btn"
-          href="https://wa.me/528442934546?text=Hola%2C%20me%20gustar%C3%ADa%20una%20invitaci%C3%B3n%20digital%2C%20%C2%BFPuedes%20darme%20info%3F"
-          target="_blank"
-          rel="noopener"
-        >
-          Hecho con amor por <strong>duskyberry</strong>
-        </a>
-        <p class="footer-year">2026</p>
-      </footer>
-    </main>
-
-    <script src="script.js"></script>
-  </body>
+<script src="script.js"></script>
+</body>
 </html>
