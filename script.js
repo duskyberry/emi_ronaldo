@@ -59,12 +59,20 @@
     }
   }
 
+  function playGoalSound(){
+    const sound = document.getElementById('goal-sound');
+    if (!sound) return;
+    sound.currentTime = 0;
+    sound.play().catch(() => { /* autoplay bloqueado, se ignora silenciosamente */ });
+  }
+
   function score(){
     scored = true;
     dragging = false;
     ball.classList.add('scored');
     goalFlash.classList.add('show');
     burstConfetti();
+    playGoalSound();
     if (navigator.vibrate) navigator.vibrate([30, 40, 30]);
 
     setTimeout(revealSite, 1000);
