@@ -1,6 +1,130 @@
 'use strict';
 
 /* =========================================================
+   GOAL SOUND — carga y reproducción a prueba de dispositivos
+   =========================================================
+   Estrategia "sí o sí":
+   1. Se descarga y decodifica el MP3 una sola vez con la Web Audio API
+      (fetch + decodeAudioData) apenas carga la página, SIN esperar a
+      ningún gesto del usuario — esto evita cualquier problema de buffering
+      del elemento <audio> en redes lentas.
+   2. En el primer toque del usuario (pointerdown/touchstart) se
+      "despierta" el AudioContext (ctx.resume()), que es el único permiso
+      que iOS/Android realmente exigen.
+   3. Al anotar el gol, se reproduce el buffer ya decodificado con
+      AudioBufferSourceNode — reproducción instantánea, sin latencia de
+      red ni de decodificación, funciona igual en iPhone y Android.
+   4. Si el navegador no soporta Web Audio API (rarísimo hoy en día) o la
+      descarga/decodificación falla, se cae de vuelta al <audio> normal
+      del HTML como respaldo.
+   ========================================================= */
+const GoalAudio = (function initGoalAudio(){
+  const SOUND_URL = 'https://raw.githubusercontent.com/edvardoviedo/emimessi/main/Cristiano%20Ronaldo%20Siuu%21%20-%20Sound%20Effect.mp3';
+  const fallbackEl = document.getElementById('goal-sound');
+
+  let ctx = null;
+  let buffer = null;
+  let bufferPromise = null;
+  let unlocked = false;
+
+  function getCtx(){
+    if (!ctx){
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (Ctx){
+        try { ctx = new Ctx(); }
+        catch (err){ console.error('[goal-sound] no se pudo crear AudioContext:', err); }
+      } else {
+        console.warn('[goal-sound] Web Audio API no soportada en este navegador');
+      }
+    }
+    return ctx;
+  }
+
+  function loadBuffer(){
+    if (bufferPromise) return bufferPromise;
+    const audioCtx = getCtx();
+    if (!audioCtx){
+      bufferPromise = Promise.resolve(null);
+      return bufferPromise;
+    }
+    console.log('[goal-sound] descargando y decodificando audio…');
+    bufferPromise = fetch(SOUND_URL)
+      .then((res) => {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.arrayBuffer();
+      })
+      .then((data) => audioCtx.decodeAudioData(data))
+      .then((decoded) => {
+        buffer = decoded;
+        console.log('[goal-sound] buffer decodificado y listo ✔ (' + decoded.duration.toFixed(2) + 's)');
+        return decoded;
+      })
+      .catch((err) => {
+        console.error('[goal-sound] falló la descarga/decodificación, se usará <audio> de respaldo:', err);
+        return null;
+      });
+    return bufferPromise;
+  }
+
+  // Empieza a cargar de inmediato, sin esperar interacción del usuario.
+  loadBuffer();
+  if (fallbackEl) fallbackEl.load();
+
+  function unlock(){
+    if (unlocked) return;
+    unlocked = true;
+    const audioCtx = getCtx();
+    if (audioCtx && audioCtx.state === 'suspended'){
+      audioCtx.resume()
+        .then(() => console.log('[goal-sound] AudioContext reanudado tras gesto del usuario ✔'))
+        .catch((err) => console.warn('[goal-sound] no se pudo reanudar el AudioContext:', err));
+    }
+    // Respaldo: desbloquear también el <audio> por si hiciera falta.
+    if (fallbackEl){
+      const attempt = fallbackEl.play();
+      if (attempt !== undefined){
+        attempt
+          .then(() => { fallbackEl.pause(); fallbackEl.currentTime = 0; })
+          .catch(() => { /* se ignora: solo es un respaldo secundario */ });
+      }
+    }
+  }
+
+  function playFallback(){
+    if (!fallbackEl){
+      console.warn('[goal-sound] no hay ningún método disponible para reproducir el sonido');
+      return;
+    }
+    fallbackEl.currentTime = 0;
+    fallbackEl.play()
+      .then(() => console.log('[goal-sound] reproduciendo vía <audio> de respaldo ✔'))
+      .catch((err) => console.error('[goal-sound] también falló el respaldo <audio>:', err));
+  }
+
+  function play(){
+    const audioCtx = getCtx();
+    if (audioCtx && buffer){
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const source = audioCtx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(audioCtx.destination);
+        source.start(0);
+        console.log('[goal-sound] reproduciendo vía Web Audio API ✔');
+        return;
+      } catch (err){
+        console.error('[goal-sound] error reproduciendo con Web Audio API, usando respaldo:', err);
+      }
+    } else {
+      console.warn('[goal-sound] el buffer aún no estaba listo al anotar, usando respaldo <audio>');
+    }
+    playFallback();
+  }
+
+  return { unlock, play, loadBuffer };
+})();
+
+/* =========================================================
    INTRO GATE — drag ball to goal
    ========================================================= */
 (function initIntro(){
@@ -17,41 +141,6 @@
   let scored = false;
   let originX = 0;
   let pointerStartX = 0;
-  let audioUnlocked = false;
-
-  const goalSound = document.getElementById('goal-sound');
-  if (goalSound){
-    goalSound.load();
-    console.log('[goal-sound] elemento encontrado, precargando…', goalSound.src);
-  } else {
-    console.warn('[goal-sound] no se encontró el elemento #goal-sound en el DOM');
-  }
-
-  /* Los navegadores (sobre todo Safari/iOS) solo permiten "desbloquear"
-     audio dentro de un gesto de usuario de confianza: pointerdown/touchstart
-     sí cuentan, pero pointermove (que es donde se detecta el gol durante el
-     arrastre) NO cuenta como gesto válido para autoplay. Por eso se
-     desbloquea aquí, en la primera interacción, reproduciendo y pausando
-     de inmediato en silencio. Así, cuando luego se llama audio.play() al
-     anotar el gol, el navegador ya lo permite. */
-  function unlockAudio(){
-    if (audioUnlocked || !goalSound) return;
-    audioUnlocked = true;
-    const playAttempt = goalSound.play();
-    if (playAttempt !== undefined){
-      playAttempt
-        .then(() => {
-          goalSound.pause();
-          goalSound.currentTime = 0;
-          console.log('[goal-sound] audio desbloqueado correctamente tras gesto del usuario');
-        })
-        .catch((err) => {
-          console.warn('[goal-sound] no se pudo desbloquear el audio en el primer gesto:', err);
-          // Se reintentará igual al anotar el gol.
-          audioUnlocked = false;
-        });
-    }
-  }
 
   function getBallOffsetX(){
     const style = window.getComputedStyle(ball);
@@ -61,7 +150,7 @@
 
   function onPointerDown(e){
     if (scored) return;
-    unlockAudio();
+    GoalAudio.unlock();
     dragging = true;
     ball.classList.add('dragging');
     pointerStartX = (e.touches ? e.touches[0].clientX : e.clientX);
@@ -95,31 +184,13 @@
     }
   }
 
-  function playGoalSound(){
-    if (!goalSound){
-      console.warn('[goal-sound] no se puede reproducir: elemento no existe');
-      return;
-    }
-    try {
-      goalSound.currentTime = 0;
-      const playAttempt = goalSound.play();
-      if (playAttempt !== undefined){
-        playAttempt
-          .then(() => console.log('[goal-sound] reproduciendo sonido de gol ✔'))
-          .catch((err) => console.error('[goal-sound] falló la reproducción al anotar:', err));
-      }
-    } catch (err){
-      console.error('[goal-sound] excepción al intentar reproducir:', err);
-    }
-  }
-
   function score(){
     scored = true;
     dragging = false;
     ball.classList.add('scored');
     goalFlash.classList.add('show');
     burstConfetti();
-    playGoalSound();
+    GoalAudio.play();
     if (navigator.vibrate) navigator.vibrate([30, 40, 30]);
 
     setTimeout(revealSite, 1000);
@@ -147,7 +218,7 @@
   ball.addEventListener('keydown', (e) => {
     if ((e.key === 'Enter' || e.key === ' ') && !scored){
       e.preventDefault();
-      unlockAudio();
+      GoalAudio.unlock();
       score();
     }
   });
